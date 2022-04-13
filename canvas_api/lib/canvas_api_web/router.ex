@@ -2,11 +2,13 @@ defmodule CanvasApiWeb.Router do
   use CanvasApiWeb, :router
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/api", CanvasApiWeb do
-    pipe_through :api
+    pipe_through(:api)
+
+    resources("/canvases", CanvasController, except: [:new, :edit])
   end
 
   # Enables LiveDashboard only for development
@@ -20,9 +22,9 @@ defmodule CanvasApiWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through [:fetch_session, :protect_from_forgery]
+      pipe_through([:fetch_session, :protect_from_forgery])
 
-      live_dashboard "/dashboard", metrics: CanvasApiWeb.Telemetry
+      live_dashboard("/dashboard", metrics: CanvasApiWeb.Telemetry)
     end
   end
 end
