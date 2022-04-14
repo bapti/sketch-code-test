@@ -9,6 +9,8 @@ defmodule CanvasApiWeb.Router do
     pipe_through(:api)
 
     resources("/canvases", CanvasController, except: [:new, :edit])
+
+    get("/render/:id", RenderController, :show)
   end
 
   # Enables LiveDashboard only for development

@@ -1,4 +1,4 @@
-defmodule CanvasApiWeb.RenderingController do
+defmodule CanvasApiWeb.RenderController do
   use CanvasApiWeb, :controller
 
   alias CanvasApi.Renderer
@@ -10,6 +10,9 @@ defmodule CanvasApiWeb.RenderingController do
   def show(conn, %{"id" => id}) do
     canvas = Canvases.get_canvas!(id)
     rendered_canvas = Renderer.draw_canvas(canvas)
-    render(conn, "show.json", canvas: canvas)
+
+    conn
+    |> put_resp_header("content-type", "application/json; charset=utf-8")
+    |> send_resp(200, Jason.encode!(%{data: rendered_canvas}, pretty: true))
   end
 end
