@@ -64,7 +64,7 @@ The canvas can be assumed to be a fixed size.
 
 ### Test fixture 2
 
-- Rectangle at `[14, 0]` with width `7`, height `6`, outline character: none, fill: `.`
+- Rectangle at `[14, 0]` with width `7`, height `6`, outline character: `none`, fill: `.`
 - Rectangle at `[0, 3]` with width `8`, height `4`, outline character: `O`, fill: `none`
 - Rectangle at `[5, 5]` with width `5`, height `3`, outline character: `X`, fill: `X`
 
