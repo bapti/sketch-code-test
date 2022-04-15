@@ -18,8 +18,8 @@ defmodule CanvasApi.Canvases.Rectangle do
     |> validate_required([:top, :left, :width, :height])
     |> validate_number(:top, greater_than_or_equal_to: 0)
     |> validate_number(:left, greater_than_or_equal_to: 0)
-    |> validate_number(:width, greater_than_or_equal_to: 0)
-    |> validate_number(:height, greater_than_or_equal_to: 0)
+    |> validate_number(:width, greater_than_or_equal_to: 1)
+    |> validate_number(:height, greater_than_or_equal_to: 1)
     |> validate_outline_and_fill()
   end
 

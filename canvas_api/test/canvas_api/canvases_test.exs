@@ -12,10 +12,6 @@ defmodule CanvasApi.CanvasesTest do
       rectangles: [%{top: 2, left: 2, width: 2, height: 2, outline: "X", fill: "O"}]
     }
 
-    @invalid_attrs %{
-      rectangles: [%{top: 0}]
-    }
-
     test "list_canvases/0 returns all canvases" do
       canvas = canvas_fixture(@valid_attrs)
       assert Canvases.list_canvases() == [canvas]
@@ -27,27 +23,54 @@ defmodule CanvasApi.CanvasesTest do
     end
 
     test "create_canvas/1 with valid data creates a canvas" do
-      valid_attrs = %{
-        rectangles: [%{top: 2, left: 2, width: 2, height: 2, outline: "X", fill: "O"}]
-      }
-
-      assert {:ok, %Canvas{} = _canvas} = Canvases.create_canvas(valid_attrs)
+      data = %{rectangles: [%{top: 2, left: 2, width: 2, height: 2, outline: "X", fill: "O"}]}
+      assert {:ok, %Canvas{} = _canvas} = Canvases.create_canvas(data)
     end
 
-    test "create_canvas/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Canvases.create_canvas(@invalid_attrs)
+    test "create_canvas/1 with invalid top returns error changeset" do
+      data = %{rectangles: [%{top: -1, left: 2, width: 2, height: 2, outline: "X", fill: "O"}]}
+      assert {:error, %Ecto.Changeset{}} = Canvases.create_canvas(data)
+    end
+
+    test "create_canvas/1 with invalid left returns error changeset" do
+      data = %{rectangles: [%{top: 2, left: -2, width: 2, height: 2, outline: "X", fill: "O"}]}
+      assert {:error, %Ecto.Changeset{}} = Canvases.create_canvas(data)
+    end
+
+    test "create_canvas/1 with invalid width returns error changeset" do
+      data = %{rectangles: [%{top: 2, left: 2, width: 0, height: 2, outline: "X", fill: "O"}]}
+      assert {:error, %Ecto.Changeset{}} = Canvases.create_canvas(data)
+    end
+
+    test "create_canvas/1 with invalid height returns error changeset" do
+      data = %{rectangles: [%{top: 1, left: 2, width: 2, height: 0, outline: "X", fill: "O"}]}
+      assert {:error, %Ecto.Changeset{}} = Canvases.create_canvas(data)
+    end
+
+    test "create_canvas/1 with missing fill and outline returns error changeset" do
+      data = %{rectangles: [%{top: 2, left: 2, width: 2, height: 2}]}
+      assert {:error, %Ecto.Changeset{}} = Canvases.create_canvas(data)
+    end
+
+    test "create_canvas/1 with empty fill and outline returns error changeset" do
+      data = %{rectangles: [%{top: 2, left: 2, width: 2, height: 2, outline: "", fill: ""}]}
+      assert {:error, %Ecto.Changeset{}} = Canvases.create_canvas(data)
     end
 
     test "update_canvas/2 with valid data updates the canvas" do
-      canvas = canvas_fixture()
-      update_attrs = %{}
+      canvas = canvas_fixture(@valid_attrs)
+
+      update_attrs = %{
+        rectangles: [%{top: 3, left: 4, width: 1, height: 3, outline: "R", fill: "S"}]
+      }
 
       assert {:ok, %Canvas{} = _canvas} = Canvases.update_canvas(canvas, update_attrs)
     end
 
     test "update_canvas/2 with invalid data returns error changeset" do
-      canvas = canvas_fixture()
-      assert {:error, %Ecto.Changeset{}} = Canvases.update_canvas(canvas, @invalid_attrs)
+      canvas = canvas_fixture(@valid_attrs)
+      data = %{rectangles: [%{outline: "", fill: ""}]}
+      assert {:error, %Ecto.Changeset{}} = Canvases.update_canvas(canvas, data)
       assert canvas == Canvases.get_canvas!(canvas.id)
     end
 
