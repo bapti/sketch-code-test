@@ -1,5 +1,4 @@
 defmodule CanvasApi.Renderer do
-  alias CanvasApi.Canvases.Rectangle
   alias CanvasApi.Canvases.Canvas
 
   def draw_canvas(%Canvas{} = canvas) do
